@@ -1,15 +1,27 @@
-FROM alpine:3.6 AS builder
-MAINTAINER Ray Tsang
+FROM alpine:3.9 AS builder
+RUN apk add --update --no-cache alpine-sdk openssl-dev cmake git zlib-dev
 
-RUN apk add --update alpine-sdk openssl-dev
-RUN apk add --no-cache git
+RUN git clone --single-branch --depth 1 https://github.com/giltene/wrk2.git
+RUN git clone --single-branch --depth 1 https://github.com/HdrHistogram/HdrHistogram_c
+WORKDIR /HdrHistogram_c
+RUN cmake CMakeLists.txt
+RUN make install
 
-RUN git clone https://github.com/giltene/wrk2.git
 ENV LDFLAGS -static-libgcc
 ENV CFLAGS -static-libgcc
-RUN cd wrk2 && make -j2
+WORKDIR /wrk2
+RUN make
+RUN mv wrk /usr/local/bin/wrk2
 
-FROM alpine:3.6
-RUN apk add --update openssl && apk --no-cache add ca-certificates
-COPY --from=builder /wrk2/wrk /bin
-ENTRYPOINT ["wrk"]
+FROM alpine:3.9
+RUN apk add --update --no-cache openssl ca-certificates gnuplot
+COPY --from=builder /usr/local/bin/hdr_* /bin
+COPY --from=builder /usr/local/bin/wrk2 /bin
+ENTRYPOINT ["wrk2"]
+# sample options:
+#   using 2 threads, 
+#   keeping 100 HTTP connections open, 
+#   run for 30 seconds, 
+#   with constant throughput of 12000 requests per second (total, across all connections combined)
+#   add detailed latency percentile information (spreadsheets, gnuplot or http://hdrhistogram.org/)
+#CMD ["-t2", "-c100", "-d30s", "-R12000", "--latency", "http://172.17.0.1/index.html"]
