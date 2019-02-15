@@ -17,3 +17,8 @@ Pipe the genrated file into `wrk2img` for a graphical representation of the obse
 `cat R18000 | wrk2img output.png`
 
 ![](output/output.png)
+
+## Credit
+
+* Source code (C) [giltene/wrk2](https://github.com/giltene/wrk2)
+* [Http Load Testing With Wrk2](https://www.yangyang.cloud/blog/2018/11/05/http-load-testing-with-wrk2/)
