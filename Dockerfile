@@ -15,8 +15,8 @@ RUN mv wrk /usr/local/bin/wrk2
 
 FROM alpine:3.9
 RUN apk add --update --no-cache openssl ca-certificates gnuplot
-COPY --from=builder /usr/local/bin/hdr_* /bin
-COPY --from=builder /usr/local/bin/wrk2 /bin
+COPY --from=builder /usr/local/bin/hdr_* /bin/
+COPY --from=builder /usr/local/bin/wrk2 /bin/
 ENTRYPOINT ["wrk2"]
 # sample options:
 #   using 2 threads, 
