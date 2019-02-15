@@ -22,3 +22,4 @@ Pipe the genrated file into `wrk2img` for a graphical representation of the obse
 
 * Source code (C) [giltene/wrk2](https://github.com/giltene/wrk2)
 * [Http Load Testing With Wrk2](https://www.yangyang.cloud/blog/2018/11/05/http-load-testing-with-wrk2/)
+* [An Introduction to Load Testing](https://www.digitalocean.com/community/tutorials/an-introduction-to-load-testing)
